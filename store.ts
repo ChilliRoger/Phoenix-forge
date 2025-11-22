@@ -112,8 +112,8 @@ export const useStore = create<ResurrectionState>((set, get) => ({
       updateProgress(20);
       
       if (snapshot) {
-        addLog(`SNAPSHOT_FOUND [YEAR: ${snapshot.year}]`, 'success');
-        addLog(`DOWNLOADING_HTML [SIZE: ${(snapshot.html.length / 1024).toFixed(2)}KB]`, 'info');
+        addLog(`SNAPSHOT_FOUND [ARCHIVED]`, 'success');
+        addLog(`DOWNLOADING_HTML [SIZE: ${(snapshot.length / 1024).toFixed(2)}KB]`, 'info');
       } else {
         addLog('NO_SNAPSHOT_FOUND. USING_DEMO_MODE.', 'warning');
       }
@@ -128,7 +128,7 @@ export const useStore = create<ResurrectionState>((set, get) => ({
       
       // Inject Web3 connectors
       addLog('INJECTING_WEB3_CONNECTORS...', 'info');
-      const enhanced = snapshot ? await injectWeb3Connectors(snapshot.html) : null;
+      const enhanced = snapshot ? await injectWeb3Connectors(snapshot) : null;
       updateProgress(65);
       
       if (enhanced) {
@@ -204,12 +204,9 @@ export const useStore = create<ResurrectionState>((set, get) => ({
       await new Promise(r => setTimeout(r, 800));
       addLog('UPLOADING_TO_IPFS...', 'info');
       
-      const result = await pinToIPFS(htmlContent, currentProject.name);
+      const result = await pinToIPFS(htmlContent, { name: currentProject.name });
       addLog(`CID_GENERATED: ${result.cid}`, 'success');
-      
-      if (result.pinataUrl) {
-        addLog(`PINATA_GATEWAY: ${result.pinataUrl}`, 'info');
-      }
+      addLog(`IPFS_GATEWAY: https://gateway.pinata.cloud/ipfs/${result.cid}`, 'info');
       
       // Generate ENS subdomain
       await new Promise(r => setTimeout(r, 600));

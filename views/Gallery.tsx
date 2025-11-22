@@ -60,12 +60,12 @@ export const Gallery: React.FC = () => {
     .filter(project => {
       const matchesFilter = filter === 'all' || project.tags.includes(filter.toUpperCase());
       const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           project.description.toLowerCase().includes(searchTerm.toLowerCase());
+                           (project.description?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
       return matchesFilter && matchesSearch;
     })
     .sort((a, b) => {
-      if (sortBy === 'votes') return b.votes - a.votes;
-      return parseInt(b.lastActive) - parseInt(a.lastActive);
+      if (sortBy === 'votes') return (b.votes ?? 0) - (a.votes ?? 0);
+      return parseInt(b.lastActive || '0') - parseInt(a.lastActive || '0');
     });
 
   const allTags = Array.from(new Set(GALLERY_MOCK.flatMap(p => p.tags)));
@@ -83,7 +83,7 @@ export const Gallery: React.FC = () => {
           <div className="text-gray-500 text-xs uppercase tracking-wider font-mono">Uptime</div>
         </div>
         <div className="bg-black/40 border border-white/10 p-4 backdrop-blur-sm">
-          <div className="text-3xl font-bold text-white font-mono">{GALLERY_MOCK.reduce((acc, p) => acc + p.votes, 0)}</div>
+          <div className="text-3xl font-bold text-white font-mono">{GALLERY_MOCK.reduce((acc, p) => acc + (p.votes ?? 0), 0)}</div>
           <div className="text-gray-500 text-xs uppercase tracking-wider font-mono">Total Nodes</div>
         </div>
         <div className="bg-black/40 border border-white/10 p-4 backdrop-blur-sm">

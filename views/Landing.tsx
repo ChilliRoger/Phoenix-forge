@@ -209,7 +209,7 @@ export const Landing: React.FC = () => {
       <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 z-0 pointer-events-none"></div>
 
       {/* --- HERO SECTION --- */}
-      <section className="min-h-[85vh] flex flex-col justify-start items-center text-center w-full relative z-10 pt-8 md:pt-20">
+      <section className="min-h-[85vh] flex flex-col justify-center items-center text-center w-full relative z-10 pt-8 md:pt-20 pb-24">
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -234,7 +234,7 @@ export const Landing: React.FC = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl font-mono leading-relaxed"
+          className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl font-mono leading-relaxed px-4"
         >
           Smart contracts are eternal. Frontends are mortal.
           <br/><br/>
@@ -245,7 +245,7 @@ export const Landing: React.FC = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="flex flex-wrap gap-6 justify-center"
+          className="flex flex-wrap gap-6 justify-center mb-16"
         >
           <Link
             href="/resurrect"
@@ -267,7 +267,7 @@ export const Landing: React.FC = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ delay: 1.5, duration: 1 }}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce text-gray-600"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-gray-600 z-20"
         >
             <ArrowDown size={24} />
         </motion.div>
