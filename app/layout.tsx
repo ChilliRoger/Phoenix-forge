@@ -1,6 +1,11 @@
+'use client';
+
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import { useState, useEffect } from 'react'
+import { LoadingScreen } from '@/components/LoadingScreen'
+import { AnimatePresence } from 'framer-motion'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -12,20 +17,24 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
 })
 
-export const metadata: Metadata = {
-  title: 'PhoenixForge | Industrial Web3 Resurrection',
-  description: 'Industrial-grade Web3 resurrection tool. Decentralized frontend recovery pinned to IPFS/ENS.',
-}
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // This only runs once on initial mount
+  }, []);
+
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
-        {children}
+        <AnimatePresence mode="wait">
+          {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+        </AnimatePresence>
+        {!isLoading && children}
       </body>
     </html>
   )
