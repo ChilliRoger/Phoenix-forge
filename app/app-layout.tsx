@@ -27,7 +27,7 @@ export default function AppLayout({
           {children}
         </main>
         <footer className="border-t border-white/10 bg-black/40 backdrop-blur-sm py-8 text-center text-gray-500 text-xs font-mono uppercase tracking-widest">
-          <p>System Status: Operational • PhoenixForge &copy; 2024</p>
+          <p>System Status: Operational • PhoenixForge &copy; 2025</p>
         </footer>
       </motion.div>
       

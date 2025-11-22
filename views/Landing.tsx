@@ -238,7 +238,7 @@ export const Landing: React.FC = () => {
         >
           Smart contracts are eternal. Frontends are mortal.
           <br/><br/>
-          <span className="text-white">PhoenixForge</span> creates decentralized, permanent mirrors of vanished Web3 applications.
+          <span className="text-white">PhoenixForge</span> resurrects abandoned <span className="text-brand-red">DAO governance dashboards</span> and <span className="text-brand-red">DeFi protocol frontends</span>, ensuring permanent access to on-chain infrastructure even when centralized hosting fails.
         </motion.p>
 
         <motion.div
@@ -291,7 +291,7 @@ export const Landing: React.FC = () => {
                     subtitle="System Vulnerability" 
                 />
                 <p className="text-gray-400 text-lg leading-relaxed font-mono mb-8">
-                    Your assets live on the blockchain, but your access lives on AWS. When a project's domain expires, hosting bills aren't paid, or founders disappear, the interface dies.
+                    DAO treasury assets live on-chain forever, but governance dashboards die when hosting expires. When DAO funding runs out, domains expire, or teams disband, members lose access to critical voting interfaces and treasury management tools.
                 </p>
                 <div className="bg-brand-red/5 border border-brand-red/20 p-6 rounded relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-20">
@@ -312,7 +312,7 @@ export const Landing: React.FC = () => {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.1)_0%,transparent_70%)]"></div>
                     <div className="flex flex-col items-center gap-8 opacity-80">
                         <div className="w-48 h-16 border-2 border-white/20 rounded flex items-center justify-center bg-black z-10">
-                            <span className="font-mono text-xs uppercase tracking-widest text-gray-400">Smart Contract</span>
+                            <span className="font-mono text-xs uppercase tracking-widest text-gray-400">DAO Treasury</span>
                         </div>
                         <div className="h-16 w-0.5 bg-brand-red/50 relative">
                              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-black border-2 border-brand-red text-brand-red flex items-center justify-center rotate-45">
@@ -320,7 +320,7 @@ export const Landing: React.FC = () => {
                              </div>
                         </div>
                         <div className="w-48 h-16 border-2 border-dashed border-gray-700 rounded flex items-center justify-center bg-black/50 z-10">
-                             <span className="font-mono text-xs uppercase tracking-widest text-gray-600 line-through">Web Interface</span>
+                             <span className="font-mono text-xs uppercase tracking-widest text-gray-600 line-through">Governance Dashboard</span>
                         </div>
                     </div>
                 </div>

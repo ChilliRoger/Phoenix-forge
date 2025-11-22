@@ -1,6 +1,6 @@
 # 🔥 Phoenix Forge - Decentralized Frontend Resurrection Protocol
 
-**Revive dead Web2 frontends as permanent, censorship-resistant Web3 sites on IPFS + ENS**
+**Resurrect abandoned DAO governance dashboards and DeFi protocol frontends as permanent, censorship-resistant Web3 sites on IPFS + ENS**
 
 [![Deploy with PinMe](https://img.shields.io/badge/Deploy%20with-PinMe-red)](https://pinme.eth.limo/)
 [![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js%2015-black)](https://nextjs.org/)
