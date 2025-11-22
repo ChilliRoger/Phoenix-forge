@@ -8,7 +8,6 @@
 [![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js%2015-black)](https://nextjs.org/)
 [![IPFS](https://img.shields.io/badge/Storage-IPFS-blue)](https://ipfs.io/)
 [![ENS](https://img.shields.io/badge/Naming-ENS-purple)](https://ens.domains/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 *Resurrect abandoned DAO governance dashboards and DeFi protocol frontends as permanent, censorship-resistant Web3 sites on IPFS + ENS*
 
