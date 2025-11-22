@@ -94,10 +94,37 @@ const SplitPreview: React.FC = () => {
           className="absolute inset-0 bg-cover bg-center flex items-center justify-center"
           style={{ backgroundImage: `url(${currentProject?.rebornImage})` }}
         >
-          <div className="bg-black/80 p-6 backdrop-blur-md border border-brand-red/50 max-w-xs">
-            <h3 className="text-brand-red font-mono text-xs uppercase mb-2 tracking-widest">Live_Data_Stream</h3>
-            <p className="text-white font-bold text-3xl font-mono">$42,069,133</p>
-            <p className="text-gray-500 text-xs font-mono mt-1">Treasury_Balance_Verified</p>
+          <div className="bg-black/90 p-8 backdrop-blur-md border border-brand-red/50 max-w-md">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <h3 className="text-brand-red font-mono text-xs uppercase tracking-widest">Wallet Connected • Live DAO Data</h3>
+            </div>
+            
+            {/* Treasury Balance */}
+            <div className="mb-4">
+              <p className="text-gray-500 text-xs font-mono mb-1">Treasury Balance (ETH)</p>
+              <p className="text-white font-bold text-4xl font-mono">$42,069,133</p>
+              <p className="text-green-500 text-xs font-mono mt-1">+2.4% Last 7 Days</p>
+            </div>
+            
+            {/* Active Proposals */}
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+              <div>
+                <p className="text-gray-500 text-xs font-mono mb-1">Active Proposals</p>
+                <p className="text-white font-bold text-2xl font-mono">12</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs font-mono mb-1">Token Holders</p>
+                <p className="text-white font-bold text-2xl font-mono">8,420</p>
+              </div>
+            </div>
+            
+            <div className="mt-4 pt-4 border-t border-white/10">
+              <p className="text-brand-red text-xs font-mono flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-brand-red rounded-full"></span>
+                On-Chain Verification: ENABLED
+              </p>
+            </div>
           </div>
         </div>
 
@@ -161,14 +188,31 @@ const SuccessModal: React.FC = () => {
           
           <div className="bg-white/5 p-6 text-left space-y-4 mb-8 border border-white/10">
              <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-xs uppercase">ENS Gateway</span>
-                <div className="flex items-center gap-2 text-brand-red text-sm font-bold cursor-pointer hover:underline" onClick={() => toast.success('Copied')}>
+                <span className="text-gray-500 text-xs uppercase">ENS Domain</span>
+                <div className="flex items-center gap-2 text-brand-red text-sm font-bold cursor-pointer hover:underline" onClick={() => {
+                  navigator.clipboard.writeText(currentProject?.ens || '');
+                  toast.success('ENS copied to clipboard');
+                }}>
                     {currentProject?.ens} <Copy size={12} />
                 </div>
              </div>
              <div className="flex justify-between items-center">
+                <span className="text-gray-500 text-xs uppercase">Gateway URL</span>
+                <a 
+                  href={`https://${currentProject?.ens}.limo`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-blue-400 text-xs hover:text-blue-300 hover:underline"
+                >
+                    {currentProject?.ens}.limo →
+                </a>
+             </div>
+             <div className="flex justify-between items-center">
                 <span className="text-gray-500 text-xs uppercase">IPFS Hash</span>
-                <div className="flex items-center gap-2 text-gray-300 text-xs truncate max-w-[150px] cursor-pointer hover:text-white" onClick={() => toast.success('Copied')}>
+                <div className="flex items-center gap-2 text-gray-300 text-xs truncate max-w-[150px] cursor-pointer hover:text-white" onClick={() => {
+                  navigator.clipboard.writeText(currentProject?.ipfsHash || '');
+                  toast.success('CID copied to clipboard');
+                }}>
                     {currentProject?.ipfsHash} <Copy size={12} />
                 </div>
              </div>
@@ -177,15 +221,9 @@ const SuccessModal: React.FC = () => {
           <div className="flex gap-4 justify-center">
             <button 
               onClick={reset}
-              className="px-6 py-3 border border-white/20 hover:bg-white/5 text-white text-sm uppercase tracking-widest font-bold transition-colors"
+              className="px-8 py-4 bg-brand-red text-white hover:bg-brand-accent text-sm uppercase tracking-widest font-bold transition-colors"
             >
-              Reset System
-            </button>
-            <button 
-              className="px-6 py-3 bg-brand-red text-white hover:bg-brand-accent text-sm uppercase tracking-widest font-bold transition-colors"
-              onClick={() => toast.success('Opening Gateway...')}
-            >
-              Launch DApp
+              OK
             </button>
           </div>
         </motion.div>
@@ -209,10 +247,13 @@ export const Resurrect: React.FC = () => {
       
       <div className="text-center mb-16 mt-8">
         <div className="inline-block px-3 py-1 border border-brand-red/30 text-brand-red text-xs mb-4 uppercase tracking-[0.2em]">
-            System Ready
+            DAO/DeFi Recovery Protocol
         </div>
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white font-mono uppercase tracking-tight">Resurrection Chamber</h1>
-        <p className="text-gray-500 font-mono text-sm max-w-lg mx-auto">Initialize the recovery sequence by providing the target URL coordinates.</p>
+        <p className="text-gray-500 font-mono text-sm max-w-2xl mx-auto">
+          Revive abandoned DAO dashboards and DeFi protocols with wallet-connected governance features. 
+          <span className="text-brand-red"> Bonus points for decentralized infrastructure.</span>
+        </p>
       </div>
 
       {step === 'input' && (
@@ -242,9 +283,39 @@ export const Resurrect: React.FC = () => {
               </button>
           </div>
           
-          <div className="mt-6 flex gap-6 text-xs text-gray-600 justify-center font-mono uppercase tracking-wide">
-            <span className="cursor-pointer hover:text-brand-red transition-colors" onClick={() => setUrlInput('https://nouns.wtf')}>[Load_Sample: Nouns]</span>
-            <span className="cursor-pointer hover:text-brand-red transition-colors" onClick={() => setUrlInput('https://defikingdoms.com')}>[Load_Sample: DFK]</span>
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-gray-600 font-mono uppercase tracking-wide">
+            <button 
+              type="button"
+              className="cursor-pointer hover:text-brand-red hover:bg-brand-red/5 transition-all p-3 border border-white/10 text-left" 
+              onClick={() => setUrlInput('https://nouns.wtf')}
+            >
+              <div className="text-brand-red mb-1">DAO</div>
+              Nouns Gov
+            </button>
+            <button 
+              type="button"
+              className="cursor-pointer hover:text-brand-red hover:bg-brand-red/5 transition-all p-3 border border-white/10 text-left" 
+              onClick={() => setUrlInput('https://app.uniswap.org')}
+            >
+              <div className="text-brand-red mb-1">DEX</div>
+              Uniswap V2
+            </button>
+            <button 
+              type="button"
+              className="cursor-pointer hover:text-brand-red hover:bg-brand-red/5 transition-all p-3 border border-white/10 text-left" 
+              onClick={() => setUrlInput('https://vote.makerdao.com')}
+            >
+              <div className="text-brand-red mb-1">DAO</div>
+              MakerDAO
+            </button>
+            <button 
+              type="button"
+              className="cursor-pointer hover:text-brand-red hover:bg-brand-red/5 transition-all p-3 border border-white/10 text-left" 
+              onClick={() => setUrlInput('https://app.compound.finance')}
+            >
+              <div className="text-brand-red mb-1">LENDING</div>
+              Compound
+            </button>
           </div>
         </motion.form>
       )}

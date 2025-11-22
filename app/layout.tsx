@@ -24,9 +24,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // This only runs once on initial mount
+    setIsMounted(true);
   }, []);
 
   return (
@@ -34,7 +35,10 @@ export default function RootLayout({
       <body className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
         <Web3Provider>
           <AnimatePresence mode="wait">
-            {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+            {isLoading && <LoadingScreen onComplete={() => {
+              setIsLoading(false);
+              sessionStorage.setItem('phoenixforge-loaded', 'true');
+            }} />}
           </AnimatePresence>
           {!isLoading && children}
         </Web3Provider>

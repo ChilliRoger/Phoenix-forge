@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Activity, AlertTriangle, Database, Cloud, Lock, Cpu, Search, FileCode, Upload, ArrowDown, ShieldCheck, Zap } from 'lucide-react';
 import clsx from 'clsx';
+import { LiveStats } from '../components/LiveStats';
+import { FeatureShowcase } from '../components/FeatureShowcase';
 
 // Animation variants for scroll reveals
 const fadeInUp = {
@@ -271,6 +273,9 @@ export const Landing: React.FC = () => {
         </motion.div>
       </section>
 
+      {/* --- LIVE STATS SECTION --- */}
+      <LiveStats />
+
       {/* --- THE PROBLEM SECTION --- */}
       <motion.section 
         initial="hidden"
@@ -348,6 +353,9 @@ export const Landing: React.FC = () => {
             </p>
         </motion.div>
       </motion.section>
+
+      {/* --- INTERACTIVE FEATURE SHOWCASE --- */}
+      <FeatureShowcase />
 
       {/* --- FEATURES GRID --- */}
       <motion.section 

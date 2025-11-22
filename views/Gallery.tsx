@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GALLERY_MOCK } from '../store';
 import { Project } from '../types';
-import { ExternalLink, Database, Share2 } from 'lucide-react';
+import { ExternalLink, Database, Share2, Filter, Search, TrendingUp, Clock } from 'lucide-react';
 
 const ProjectCard: React.FC<{ project: Project, index: number }> = ({ project, index }) => {
   return (
@@ -52,31 +52,151 @@ const ProjectCard: React.FC<{ project: Project, index: number }> = ({ project, i
 };
 
 export const Gallery: React.FC = () => {
+  const [filter, setFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'votes' | 'recent'>('votes');
+
+  const filteredProjects = GALLERY_MOCK
+    .filter(project => {
+      const matchesFilter = filter === 'all' || project.tags.includes(filter.toUpperCase());
+      const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           project.description.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesFilter && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'votes') return b.votes - a.votes;
+      return parseInt(b.lastActive) - parseInt(a.lastActive);
+    });
+
+  const allTags = Array.from(new Set(GALLERY_MOCK.flatMap(p => p.tags)));
+
   return (
     <div className="container mx-auto px-6 py-12 max-w-7xl">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 uppercase tracking-tight">Archive_Index</h1>
-          <p className="text-gray-500 font-mono text-sm max-w-xl">
-            Immutable record of resurrected decentralized interfaces.
-          </p>
+      {/* Header Stats */}
+      <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-black/40 border border-white/10 p-4 backdrop-blur-sm">
+          <div className="text-3xl font-bold text-white font-mono">{GALLERY_MOCK.length}</div>
+          <div className="text-gray-500 text-xs uppercase tracking-wider font-mono">Total Archives</div>
         </div>
-        <div className="flex gap-3 mt-4 md:mt-0 font-mono text-xs uppercase tracking-widest">
-          <button className="px-4 py-2 border border-brand-red text-brand-red hover:bg-brand-red hover:text-black transition-colors">Popular</button>
-          <button className="px-4 py-2 border border-white/10 text-gray-500 hover:border-white/30 hover:text-white transition-colors">Latest_Entries</button>
+        <div className="bg-black/40 border border-white/10 p-4 backdrop-blur-sm">
+          <div className="text-3xl font-bold text-brand-red font-mono">100%</div>
+          <div className="text-gray-500 text-xs uppercase tracking-wider font-mono">Uptime</div>
+        </div>
+        <div className="bg-black/40 border border-white/10 p-4 backdrop-blur-sm">
+          <div className="text-3xl font-bold text-white font-mono">{GALLERY_MOCK.reduce((acc, p) => acc + p.votes, 0)}</div>
+          <div className="text-gray-500 text-xs uppercase tracking-wider font-mono">Total Nodes</div>
+        </div>
+        <div className="bg-black/40 border border-white/10 p-4 backdrop-blur-sm">
+          <div className="text-3xl font-bold text-white font-mono">24/7</div>
+          <div className="text-gray-500 text-xs uppercase tracking-wider font-mono">Monitoring</div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {GALLERY_MOCK.map((project, idx) => (
-          <ProjectCard key={project.id} project={project} index={idx} />
-        ))}
-        
-        {/* Placeholder */}
-        <div className="flex items-center justify-center min-h-[300px] border border-dashed border-white/10 hover:border-brand-red/30 transition-colors bg-white/5">
-          <p className="font-mono text-xs text-gray-600 uppercase tracking-widest">[ Load_More_Records ]</p>
+      {/* Title and Search */}
+      <div className="mb-8 border-b border-white/10 pb-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 uppercase tracking-tight font-mono">Archive_Index</h1>
+            <p className="text-gray-500 font-mono text-sm max-w-xl">
+              Immutable record of resurrected decentralized interfaces.
+            </p>
+          </div>
+          
+          {/* Search Bar */}
+          <div className="flex items-center bg-black border border-white/20 p-2 focus-within:border-brand-red transition-colors w-full md:w-auto">
+            <Search size={16} className="text-gray-500 ml-2" />
+            <input
+              type="text"
+              placeholder="Search archives..."
+              className="bg-transparent border-none text-white px-3 py-1 focus:ring-0 focus:outline-none text-sm font-mono w-full md:w-64"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Filters and Sort */}
+      <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-wrap gap-2">
+          <button 
+            onClick={() => setFilter('all')}
+            className={`px-4 py-2 border text-xs font-mono uppercase tracking-widest transition-colors ${
+              filter === 'all' 
+                ? 'border-brand-red bg-brand-red/10 text-brand-red' 
+                : 'border-white/10 text-gray-500 hover:border-white/30 hover:text-white'
+            }`}
+          >
+            All ({GALLERY_MOCK.length})
+          </button>
+          {allTags.map(tag => {
+            const count = GALLERY_MOCK.filter(p => p.tags.includes(tag)).length;
+            return (
+              <button 
+                key={tag}
+                onClick={() => setFilter(tag)}
+                className={`px-4 py-2 border text-xs font-mono uppercase tracking-widest transition-colors ${
+                  filter === tag 
+                    ? 'border-brand-red bg-brand-red/10 text-brand-red' 
+                    : 'border-white/10 text-gray-500 hover:border-white/30 hover:text-white'
+                }`}
+              >
+                {tag} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex gap-2 font-mono text-xs uppercase tracking-widest">
+          <button 
+            onClick={() => setSortBy('votes')}
+            className={`flex items-center gap-2 px-4 py-2 border transition-colors ${
+              sortBy === 'votes'
+                ? 'border-brand-red text-brand-red'
+                : 'border-white/10 text-gray-500 hover:border-white/30 hover:text-white'
+            }`}
+          >
+            <TrendingUp size={14} /> Popular
+          </button>
+          <button 
+            onClick={() => setSortBy('recent')}
+            className={`flex items-center gap-2 px-4 py-2 border transition-colors ${
+              sortBy === 'recent'
+                ? 'border-brand-red text-brand-red'
+                : 'border-white/10 text-gray-500 hover:border-white/30 hover:text-white'
+            }`}
+          >
+            <Clock size={14} /> Recent
+          </button>
+        </div>
+      </div>
+
+      {/* Results Count */}
+      <div className="mb-6 text-gray-500 font-mono text-sm">
+        Showing {filteredProjects.length} of {GALLERY_MOCK.length} archives
+        {searchTerm && ` matching "${searchTerm}"`}
+      </div>
+
+      {/* Projects Grid */}
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={filter + searchTerm + sortBy}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredProjects.map((project, idx) => (
+            <ProjectCard key={project.id} project={project} index={idx} />
+          ))}
+          
+          {filteredProjects.length === 0 && (
+            <div className="col-span-full flex items-center justify-center min-h-[300px] border border-dashed border-white/10">
+              <p className="font-mono text-sm text-gray-600 uppercase tracking-widest">No archives found matching your criteria</p>
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

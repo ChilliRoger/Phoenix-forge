@@ -62,3 +62,7 @@ next-env.d.ts
 
 # OS files
 Thumbs.db
+
+# Markdown files (except README)
+*.md
+!README.md
