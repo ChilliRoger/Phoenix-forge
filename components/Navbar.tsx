@@ -1,33 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { History, LayoutGrid, Terminal, Wallet, Power } from 'lucide-react';
+import { History, LayoutGrid, Terminal } from 'lucide-react';
 import clsx from 'clsx';
 import { PhoenixLogo } from './PhoenixLogo';
-import { toast } from './ui/Toaster';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const [isConnected, setIsConnected] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
-
-  const handleConnect = () => {
-    if (isConnected) {
-      setIsConnected(false);
-      toast.success("Session Terminated");
-      return;
-    }
-
-    setIsConnecting(true);
-    // Simulate web3 handshake delay
-    setTimeout(() => {
-      setIsConnected(true);
-      setIsConnecting(false);
-      toast.success("Wallet Synced Successfully");
-    }, 1500);
-  };
 
   const NavItem = ({ to, icon: Icon, label }: { to: string; icon: any; label: string }) => {
     const isActive = pathname === to;
@@ -73,37 +55,77 @@ export const Navbar: React.FC = () => {
         {/* Vertical Divider */}
         <div className="w-px h-8 bg-white/10 hidden md:block"></div>
 
-        {/* Wallet Button */}
-        <button
-            onClick={handleConnect}
-            disabled={isConnecting}
-            className={clsx(
-                "flex items-center gap-3 px-4 py-2 border transition-all duration-300 font-mono text-xs font-bold uppercase tracking-widest relative overflow-hidden group",
-                isConnected
-                    ? "border-brand-red bg-brand-red/10 text-brand-red shadow-[0_0_15px_rgba(239,68,68,0.2)]"
-                    : "border-white/20 text-gray-400 hover:text-white hover:border-white/40 hover:bg-white/5"
-            )}
-        >
-            {isConnecting ? (
-                <>
-                    <div className="animate-spin">
-                        <PhoenixLogo className="w-4 h-4 text-brand-red" />
-                    </div>
-                    <span className="hidden sm:inline">Syncing...</span>
-                </>
-            ) : isConnected ? (
-                <>
-                     <div className="w-2 h-2 bg-brand-red rounded-full animate-pulse shadow-[0_0_8px_#ef4444]" />
-                     <span className="hidden sm:inline">0x71C...9A23</span>
-                     <Power size={14} className="ml-2 opacity-60 group-hover:opacity-100 transition-opacity" />
-                </>
-            ) : (
-                <>
-                    <Wallet size={16} />
-                    <span className="hidden sm:inline">Connect</span>
-                </>
-            )}
-        </button>
+        {/* RainbowKit Connect Button */}
+        <ConnectButton.Custom>
+          {({
+            account,
+            chain,
+            openAccountModal,
+            openChainModal,
+            openConnectModal,
+            mounted,
+          }) => {
+            const ready = mounted;
+            const connected = ready && account && chain;
+
+            return (
+              <div
+                {...(!ready && {
+                  'aria-hidden': true,
+                  'style': {
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                  },
+                })}
+              >
+                {(() => {
+                  if (!connected) {
+                    return (
+                      <button
+                        onClick={openConnectModal}
+                        className="flex items-center gap-3 px-4 py-2 border border-white/20 text-gray-400 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-300 font-mono text-xs font-bold uppercase tracking-widest"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span className="hidden sm:inline">Connect</span>
+                      </button>
+                    );
+                  }
+
+                  if (chain.unsupported) {
+                    return (
+                      <button
+                        onClick={openChainModal}
+                        className="flex items-center gap-3 px-4 py-2 border border-yellow-500/50 bg-yellow-500/10 text-yellow-500 hover:border-yellow-500 transition-all duration-300 font-mono text-xs font-bold uppercase tracking-widest"
+                      >
+                        Wrong Network
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <button
+                      onClick={openAccountModal}
+                      className="flex items-center gap-3 px-4 py-2 border border-brand-red bg-brand-red/10 text-brand-red shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:bg-brand-red/20 transition-all duration-300 font-mono text-xs font-bold uppercase tracking-widest group"
+                    >
+                      <div className="w-2 h-2 bg-brand-red rounded-full animate-pulse shadow-[0_0_8px_#ef4444]" />
+                      <span className="hidden sm:inline">
+                        {account.displayName}
+                      </span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                        <line x1="12" y1="2" x2="12" y2="12"></line>
+                      </svg>
+                    </button>
+                  );
+                })()}
+              </div>
+            );
+          }}
+        </ConnectButton.Custom>
       </div>
     </nav>
   );

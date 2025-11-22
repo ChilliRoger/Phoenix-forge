@@ -6,6 +6,7 @@ import './globals.css'
 import { useState, useEffect } from 'react'
 import { LoadingScreen } from '@/components/LoadingScreen'
 import { AnimatePresence } from 'framer-motion'
+import { Web3Provider } from '@/lib/web3Provider'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -31,10 +32,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
-        <AnimatePresence mode="wait">
-          {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
-        </AnimatePresence>
-        {!isLoading && children}
+        <Web3Provider>
+          <AnimatePresence mode="wait">
+            {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+          </AnimatePresence>
+          {!isLoading && children}
+        </Web3Provider>
       </body>
     </html>
   )
